@@ -30,7 +30,8 @@ async def help(ctx):
     embed.add_field(
         name='Find all the showtimes for a movie on a certain date\nNOTE: date must be formatted as day/month/year, ex) 2/12/2020',
         value='++movietimes movie name - date \nex) ++movietimes Saving Private Ryan - 1/1/2021', inline=False)
-    embed.add_field(name='Finds all the movies being shown on a certain date', value=';;movies date\nex) ++movies 1/1/2021', inline=False)
+    embed.add_field(name='Finds all the movies being shown on a certain date',
+                    value='++movies date\nex) ++movies 1/1/2021', inline=False)
 
     await ctx.send(embed=embed)
 
@@ -45,7 +46,8 @@ async def movietimes(ctx, *, arg):
         # await date_converter(date)
         await ctx.channel.send(await get_movie_times(movie, date))
     else:
-        await ctx.channel.send("That input is invalid. Make sure that your format it as \';;movietimes <movie name> - <movie date>\'")
+        await ctx.channel.send(
+            "That input is invalid. Make sure that your format it as \'++movietimes <movie name> - <movie date>\'")
 
 
 @bot.command()
@@ -58,8 +60,7 @@ async def movies(ctx, movie_date):
 async def get_movie_times(movie_name, movie_date):
     # turns movie name into upper case, removes 'a','the', and leading and trailing spaces, and splits it based on
     # spaces
-    movie = movie_name.upper().replace('A ', '').replace('THE ', '').replace(' A', '').replace(' THE', '').replace("'S",
-    '').replace("'", '').replace("", '').strip().split(' ')
+    movie = movie_name
 
     date = movie_date
     # date format must be: month/day/year Ex) February 22nd, 2020 must be written as 2/22/2020
@@ -75,41 +76,19 @@ async def get_movie_times(movie_name, movie_date):
         if title is None:
             continue
         else:
-            titles.update({title.strip().upper(): movie_containers.index(container)})
+            titles.update({title.strip(): movie_containers.index(container)})
 
+    name_of_movie = list(titles.keys())
 
-    name_of_movie = titles.keys()
-    key_of_movie = []
+    key_of_movie_confidence_level = process.extractOne(movie, name_of_movie)[1]
 
-    # finds if the movie entered is in the dictionary and then gets the key of that movie in the dictionary
-    for key in name_of_movie:
-        key_split = key.replace(':', '').split(' ')
-
-        for section in key_split:
-            for word in movie:
-                if word == section:
-                    key_of_movie.append(key)
-
-    print(name_of_movie)
-    print('\n')
-    print(key_of_movie)
-
-    # checks if there is more than one possible movie, and if so, prompts the user to try again
-    if len(key_of_movie) > 1:
-        possible_movies = ''
-        for title in key_of_movie:
-            possible_movies += (str(key_of_movie.index(title) + 1) + ': ' + title + '\n')
-        return 'Multiple possible movies, try again and be more specific:\n' + possible_movies
-    # checks that the bot could find a movie to check and if not, informs the user
-    elif not key_of_movie:
+    if key_of_movie_confidence_level < 80:
         return 'Could not find that movie, please make sure that you have: \n' \
-               'A) Spelled the movie name correctly\n' \
+               'A) Spelled the movie name somewhat correctly (obviously i cant find "Saving Private Ryan" if you typed "I jizzed my pants"\n' \
                'B) Have entered a movie that is going to be playing on ' + date + '\n--For a list of movies, please ' \
                                                                                   'enter !movies <date>'
-
-    # if the preceding two checks against possible errors do not run, the program resumes normally
-
-    key_of_movie = str(key_of_movie).replace('[\'', '').replace('\']', '')
+    else:
+        key_of_movie = process.extractOne(movie, name_of_movie)[0]
 
     # var box is created to store the container of the movie found by the bot
     box = movie_containers[titles.get(key_of_movie)]
@@ -118,16 +97,17 @@ async def get_movie_times(movie_name, movie_date):
     time_buttons = box.parent.parent.findAll('div', attrs={'class': 'ticketicons'})[0].findAll('a')
     # string to store the times the movie is being shown
     times = '\n'
-    for button in time_buttons:
-        times += button.string.strip() + '\n'
+    if len(time_buttons) > 0:
+        for button in time_buttons:
+            times += button.string.strip() + '\n'
+    else:
+        return 'There are no showings of ' + key_of_movie + ' on ' + date + ' at Blackstone 14 Cinema De Lux'
 
-    movie_name = key_of_movie
 
     if len(times) > 0:
-        return 'The show times for ' + movie_name + ' on ' + movie_date + ' at Blackstone 14 Cinema De Lux are: ' + times
+        return 'The show times for \"' + key_of_movie + '\" on ' + movie_date + ' at Blackstone 14 Cinema De Lux are: ' + times
     else:
-        return 'There are no show times for ' + movie_name + ' on ' + movie_date + ' at Blackstone 14 Cinema De Lux'
-
+        return 'There are no show times for \"' + key_of_movie + '\" on ' + movie_date + ' at Blackstone 14 Cinema De Lux'
 
 
 async def show_available_movies(date_param):
@@ -165,3 +145,4 @@ async def date_converter(entered_date):
 
 
 bot.run(os.environ['DISCORD_TOKEN'])
+
