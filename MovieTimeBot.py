@@ -147,6 +147,7 @@ async def show_available_movies(date_param):
     for movie in available_movies:
         available_movies += str(movie + 1) + ':    ' + titles[movie] + '\ni like yobcumdawadwa'
 
+    print(available_movies)
     return available_movies
 
 
