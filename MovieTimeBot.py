@@ -139,7 +139,7 @@ async def show_available_movies(date_param):
             titles.update({movie_containers.index(container): title.strip().upper()})
 
     available_movies = titles.keys()
-    print(available_movies)
+    print("ASDASDASD" + available_movies)
 
     if not available_movies:
         return "No movies are available on " + date
@@ -148,7 +148,7 @@ async def show_available_movies(date_param):
     for movie in available_movies:
         available_movies += str(str(movie + 1) + ':    ' + str(titles[movie]) + '\n')
 
-    return available_movies
+    return str(available_movies)
 
 
 async def date_converter(entered_date):
