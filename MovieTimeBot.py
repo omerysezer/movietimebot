@@ -1,5 +1,6 @@
 import discord
 import requests
+import os
 from bs4 import BeautifulSoup
 from discord.ext import commands
 
