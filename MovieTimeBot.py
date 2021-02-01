@@ -3,6 +3,8 @@ import requests
 import os
 from bs4 import BeautifulSoup
 from discord.ext import commands
+from fuzzywuzzy import fuzz
+from fuzzywuzzy import process
 
 bot = commands.Bot(command_prefix='++')
 bot.remove_command("help")
@@ -88,6 +90,10 @@ async def get_movie_times(movie_name, movie_date):
                 if word == section:
                     key_of_movie.append(key)
 
+    print(name_of_movie)
+    print('\n')
+    print(key_of_movie)
+
     # checks if there is more than one possible movie, and if so, prompts the user to try again
     if len(key_of_movie) > 1:
         possible_movies = ''
@@ -116,37 +122,12 @@ async def get_movie_times(movie_name, movie_date):
         times += button.string.strip() + '\n'
 
     movie_name = key_of_movie
-    return 'The show times for ' + movie_name + ' on ' + movie_date + ' at Blackstone 14 Cinema De Lux are: ' + times
 
+    if len(times) > 0:
+        return 'The show times for ' + movie_name + ' on ' + movie_date + ' at Blackstone 14 Cinema De Lux are: ' + times
+    else:
+        return 'There are no show times for ' + movie_name + ' on ' + movie_date + ' at Blackstone 14 Cinema De Lux'
 
-''' show_types = []
-    for show_type in showtime_types:
-        show_types.append(show_type.find('h3').contents[0])
-
-    # dictionary to store the times for each of the types of showings
-    movie_times_with_showtype = {}
-    # list to store the times and be added to the dictionary
-
-    # gets the time from the time_buttons, converts to string, and stores it in list movie_times
-    # for loop to get fill the dictionary with the key of each type of movie showing and their times
-    for show_type in show_types:  # iterates through the types of movie showings
-        movie_times = []  # clears the list for the next iteration
-        # stores all the buttons which store the tags which store the times of that movie showing
-        time_buttons = showtime_types[show_types.index(show_type)].findAll('a')
-        for button in time_buttons:  # iterates through the tags that store times
-            movie_times.append(button.string)  # gets time from the tag as a string and appends it to the list of times
-
-        movie_times_with_showtype.update({show_type: movie_times})  # updates the dictionary with the movie type and the times for that movie type
-
-    killme = 'The times for ' + fukingmoviename + ' on ' + movie_date + ' are:\n'
-    for key in show_types:
-        shootme = movie_times_with_showtype.get(key)
-        death = '\n'
-        for x in shootme:
-            death += death + '\n'
-        killme += '\n' + key + ':' + death  # FIGURE THIS OUT DUMBASS
-
-    return y'''
 
 
 async def show_available_movies(date_param):
