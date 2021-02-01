@@ -139,15 +139,15 @@ async def show_available_movies(date_param):
             titles.update({movie_containers.index(container): title.strip().upper()})
 
     available_movies = titles.keys()
+    print(available_movies)
 
     if not available_movies:
         return "No movies are available on " + date
 
     available_movies = 'Movies showing at Blackstone 14 Cinema de Lux theater on ' + date + ':\n'
     for movie in available_movies:
-        available_movies += str(movie + 1) + ':    ' + str(titles[movie]) + '\ni like yobcumdawadwa'
+        available_movies += str(str(movie + 1) + ':    ' + str(titles[movie]) + '\n')
 
-    print(available_movies)
     return available_movies
 
 
