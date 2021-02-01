@@ -2,7 +2,6 @@ import discord
 import requests
 from bs4 import BeautifulSoup
 from discord.ext import commands
-import os
 
 bot = commands.Bot(command_prefix='++')
 bot.remove_command("help")
@@ -119,6 +118,35 @@ async def get_movie_times(movie_name, movie_date):
     return 'The show times for ' + movie_name + ' on ' + movie_date + ' at Blackstone 14 Cinema De Lux are: ' + times
 
 
+''' show_types = []
+    for show_type in showtime_types:
+        show_types.append(show_type.find('h3').contents[0])
+
+    # dictionary to store the times for each of the types of showings
+    movie_times_with_showtype = {}
+    # list to store the times and be added to the dictionary
+
+    # gets the time from the time_buttons, converts to string, and stores it in list movie_times
+    # for loop to get fill the dictionary with the key of each type of movie showing and their times
+    for show_type in show_types:  # iterates through the types of movie showings
+        movie_times = []  # clears the list for the next iteration
+        # stores all the buttons which store the tags which store the times of that movie showing
+        time_buttons = showtime_types[show_types.index(show_type)].findAll('a')
+        for button in time_buttons:  # iterates through the tags that store times
+            movie_times.append(button.string)  # gets time from the tag as a string and appends it to the list of times
+
+        movie_times_with_showtype.update({show_type: movie_times})  # updates the dictionary with the movie type and the times for that movie type
+
+    killme = 'The times for ' + fukingmoviename + ' on ' + movie_date + ' are:\n'
+    for key in show_types:
+        shootme = movie_times_with_showtype.get(key)
+        death = '\n'
+        for x in shootme:
+            death += death + '\n'
+        killme += '\n' + key + ':' + death  # FIGURE THIS OUT DUMBASS
+
+    return y'''
+
 
 async def show_available_movies(date_param):
     date = date_param
@@ -138,17 +166,16 @@ async def show_available_movies(date_param):
             title = title.string
             titles.update({movie_containers.index(container): title.strip().upper()})
 
-    available_movies = titles.keys()
-    print("ASDASDASD" + available_movies)
+    movies = titles.keys()
 
-    if not available_movies:
+    if not movies:
         return "No movies are available on " + date
 
     available_movies = 'Movies showing at Blackstone 14 Cinema de Lux theater on ' + date + ':\n'
-    for movie in available_movies:
-        available_movies += str(str(movie + 1) + ':    ' + str(titles[movie]) + '\n')
+    for movie in movies:
+        available_movies += str(movie + 1) + ':    ' + titles[movie] + '\n'
 
-    return str(available_movies)
+    return available_movies
 
 
 async def date_converter(entered_date):
