@@ -1,14 +1,9 @@
-aiohttp==3.6.2
-async-timeout==3.0.1
-attrs==19.3.0
 beautifulsoup4==4.8.2
-certifi==2019.11.28
-chardet==3.0.4
-cycler==0.10.0
 discord==1.0.1
 discord.py==1.6.0
 docopt==0.6.2
 fuzzywuzzy==0.18.0
+<<<<<<< HEAD
 idna==2.8
 kiwisolver==1.2.0
 lxml==4.5.0
@@ -31,3 +26,6 @@ webencodings==0.5.1
 websockets==8.1
 yarg==0.1.9
 yarl==1.4.2
+=======
+requests==2.22.0
+>>>>>>> master

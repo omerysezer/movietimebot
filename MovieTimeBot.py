@@ -9,6 +9,10 @@ from fuzzywuzzy import process
 bot = commands.Bot(command_prefix='++')
 bot.remove_command("help")
 
+def get_discord_token():
+    DISCORD_TOKEN_FILE = open(r"DISCORD_TOKEN.txt", 'r')
+    DISCORD_TOKEN = DISCORD_TOKEN_FILE.read()
+    return DISCORD_TOKEN
 
 @bot.event
 async def on_ready():
@@ -139,10 +143,5 @@ async def show_available_movies(date_param):
 
     return available_movies
 
-
-async def date_converter(entered_date):
-    date = entered_date
-
-
-bot.run(os.environ['DISCORD_TOKEN'])
+bot.run(get_discord_token())
 
