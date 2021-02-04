@@ -1,4 +1,5 @@
 import discord
+from discord.ext.commands import CommandNotFound
 import requests
 from bs4 import BeautifulSoup
 from discord.ext import commands
@@ -35,6 +36,14 @@ async def on_ready():
     await bot.change_presence(activity=discord.Game(name="++help"))
 
 
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, CommandNotFound):
+        await ctx.channel.send("That is not one of my commands\nUse ++help to see a list of my commands")
+        return
+    raise error
+
+
 @bot.command()
 async def help(ctx):
     embed = discord.Embed(
@@ -56,7 +65,7 @@ async def help(ctx):
 
 
 @bot.command()
-async def movietimes(ctx, *, arg):
+async def movietimes(ctx, *, arg=""):
     if '-' in arg:
         command = arg.split('-')
         movie = command[0].strip()
@@ -69,26 +78,27 @@ async def movietimes(ctx, *, arg):
             # sends a message containing all the times for that movie on that date
             date = convert_date(date)
             await ctx.channel.send(await get_movie_times(movie, date) +
-                                   "\nIf " + str(date) + " was not the correct date you wanted, please enter the date in the "
-                                                    "mm/dd/yyyy format to ensure I get it right next time")
-    await ctx.channel.send("Incorrect formatting. Please enter ++movietimes <movie name> - <date>"
+                                   "\nIf " + str(
+                date) + " was not the correct date you wanted, please enter the date in the "
+                        "mm/dd/yyyy format to ensure I get it right next time")
+    await ctx.channel.send("Invalid command. Please enter ++movietimes <movie name> - <date>"
                            "\nEx) ++movietimes saving private ryan - 1/1/2021")
 
 
 @bot.command()
-async def movies(ctx, movie_date):
+async def movies(ctx, movie_date=""):
     date = movie_date
-    print("DATE SRIPPED: " + date.strip())
     if not date.strip():
         await ctx.channel.send("Please enter a date")
-    if not (is_date(date)):
+    elif not (is_date(date)):
         await ctx.channel.send("That input is invalid. Make sure that you enter a date in a proper format. "
                                "The best format to use is mm/dd/yy but most formats will work however")
     else:
         date = convert_date(date)
         await ctx.channel.send(await show_available_movies(date) +
-                               "\nIf " + str(date) + " was not the correct date you wanted, please enter the date in the "
-                                                "mm/dd/yyyy format to ensure I get it right next time")
+                               "\nIf " + str(
+            date) + " was not the correct date you wanted, please enter the date in the "
+                    "mm/dd/yyyy format to ensure I get it right next time")
 
 
 async def get_movie_times(movie_name, movie_date):
@@ -173,4 +183,5 @@ async def show_available_movies(date_param):
     return available_movies
 
 
-bot.run(os.environ['DISCORD_TOKEN'])
+# bot.run(os.environ['DISCORD_TOKEN'])
+bot.run('Njc4ODQxMTU5NDI2MTEzNTQz.XkoqGA.BAYRHGnbipP3YPiOb7yFztlZXGk')
