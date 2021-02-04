@@ -3,3 +3,4 @@ discord==1.0.1
 discord.py==1.6.0
 fuzzywuzzy==0.18.0
 requests==2.22.0
+
