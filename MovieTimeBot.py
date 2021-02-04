@@ -78,7 +78,7 @@ async def movietimes(ctx, *, arg):
 @bot.command()
 async def movies(ctx, movie_date):
     date = movie_date
-    if not date:
+    if not date.strip():
         await ctx.channel.send(await show_available_movies(date) +
                                "Please enter a date")
     if not (is_date(date)):
