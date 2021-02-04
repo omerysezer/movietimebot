@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 from discord.ext import commands
 from fuzzywuzzy import process
+from fuzzywuzzy import fuzz
 from dateutil.parser import parse
 import os
 
@@ -181,6 +182,12 @@ async def show_available_movies(date_param):
         available_movies += str(movie + 1) + ':    ' + titles[movie] + '\n'
 
     return available_movies
+
+
+# a cheeky command that makes the bot say I love you to anyone who says it as a command
+async def i_love_you(ctx, love_statement):
+    if fuzz.token_sort_ratio("I love you", love_statement) > 90:
+        await ctx.channel.send("I love you too")
 
 
 bot.run(os.environ['DISCORD_TOKEN'])
