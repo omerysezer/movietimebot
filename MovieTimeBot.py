@@ -71,6 +71,8 @@ async def movietimes(ctx, *, arg):
             await ctx.channel.send(await get_movie_times(movie, date) +
                                    "\nIf " + str(date) + " was not the correct date you wanted, please enter the date in the "
                                                     "mm/dd/yyyy format to ensure I get it right next time")
+    await ctx.channel.send("Incorrect formatting. Please enter ++movietimes <movie name> - <date>"
+                           "\nEx) ++movietimes saving private ryan - 1/1/2021")
 
 
 @bot.command()
