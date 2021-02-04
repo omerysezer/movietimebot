@@ -169,4 +169,4 @@ async def show_available_movies(date_param):
     return available_movies
 
 
-bot.run(os.environ['DISCORD_TOKEN'])
+bot.run("Njc4ODQxMTU5NDI2MTEzNTQz.XkoqGA.BAYRHGnbipP3YPiOb7yFztlZXGk")
