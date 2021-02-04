@@ -79,8 +79,7 @@ async def movietimes(ctx, *, arg):
 async def movies(ctx, movie_date):
     date = movie_date
     if not date.strip():
-        await ctx.channel.send(await show_available_movies(date) +
-                               "Please enter a date")
+        await ctx.channel.send("Please enter a date")
     if not (is_date(date)):
         await ctx.channel.send("That input is invalid. Make sure that you enter a date in a proper format. "
                                "The best format to use is mm/dd/yy but most formats will work however")
