@@ -4,16 +4,11 @@ from bs4 import BeautifulSoup
 from discord.ext import commands
 from fuzzywuzzy import process
 from dateutil.parser import parse
-from datetime import datetime
+import os
 
 bot = commands.Bot(command_prefix='++')
 bot.remove_command("help")
 
-
-def get_discord_token():
-    DISCORD_TOKEN_FILE = open(r"DISCORD_TOKEN.txt", 'r')
-    DISCORD_TOKEN = DISCORD_TOKEN_FILE.read()
-    return DISCORD_TOKEN
 
 
 def is_date(date):
@@ -174,4 +169,4 @@ async def show_available_movies(date_param):
     return available_movies
 
 
-bot.run(get_discord_token())
+bot.run(os.environ(['DISCORD_TOKEN']))
