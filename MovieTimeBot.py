@@ -78,6 +78,7 @@ async def movietimes(ctx, *, arg):
 @bot.command()
 async def movies(ctx, movie_date):
     date = movie_date
+    print("DATE SRIPPED: " + date.strip())
     if not date.strip():
         await ctx.channel.send("Please enter a date")
     if not (is_date(date)):
