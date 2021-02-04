@@ -1,10 +1,10 @@
 import discord
 import requests
-import os
 from bs4 import BeautifulSoup
 from discord.ext import commands
-from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
+from dateutil.parser import parse
+from datetime import datetime
 
 bot = commands.Bot(command_prefix='++')
 bot.remove_command("help")
@@ -14,6 +14,25 @@ def get_discord_token():
     DISCORD_TOKEN_FILE = open(r"DISCORD_TOKEN.txt", 'r')
     DISCORD_TOKEN = DISCORD_TOKEN_FILE.read()
     return DISCORD_TOKEN
+
+
+def is_date(date):
+    try:
+        parse(date)
+        return True
+    except:
+        return False
+
+
+def convert_date(date):
+    # converts the date into mm/dd/yyyy
+    # if unable to convert to mm/dd/
+    try:
+        converted_date = parse(date).strftime("%m/%d/%Y")
+        return converted_date
+    except:
+        print("MISSION FAILED")
+        return date
 
 
 @bot.event
@@ -44,23 +63,33 @@ async def help(ctx):
 
 @bot.command()
 async def movietimes(ctx, *, arg):
-    if '-' in arg and '/' in arg:
+    if '-' in arg:
         command = arg.split('-')
         movie = command[0].strip()
         date = command[1].strip()
-        # gets the showtimes for a movie on that date
-        # await date_converter(date)
-        await ctx.channel.send(await get_movie_times(movie, date))
-    else:
-        await ctx.channel.send(
-            "That input is invalid. Make sure that your format it as \'++movietimes <movie name> - <movie date>\'")
+
+        if not (is_date(date)):
+            await ctx.channel.send("That input is invalid. Make sure that you enter a date in a proper format. "
+                                   "The best format to use is mm/dd/yy but most formats will work")
+        else:
+            # sends a message containing all the times for that movie on that date
+            date = convert_date(date)
+            await ctx.channel.send(await get_movie_times(movie, date) +
+                                   "\nIf " + date + " was not the correct date you wanted, please enter the date in the "
+                                                  "mm/dd/yyyy format to ensure I get it right next time")
 
 
 @bot.command()
 async def movies(ctx, movie_date):
     date = movie_date
-    # await date_converter(date)
-    await ctx.channel.send(await show_available_movies(date))
+    if not (is_date(date)):
+        await ctx.channel.send("That input is invalid. Make sure that you enter a date in a proper format. "
+                               "The best format to use is mm/dd/yy but most formats will work however")
+    else:
+        date = convert_date(date)
+        await ctx.channel.send(await show_available_movies(date) +
+                               "\nIf " + date + " was not the correct date you wanted, please enter the date in the "
+                                              "mm/dd/yyyy format to ensure I get it right next time")
 
 
 async def get_movie_times(movie_name, movie_date):
