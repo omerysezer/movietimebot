@@ -10,7 +10,6 @@ bot = commands.Bot(command_prefix='++')
 bot.remove_command("help")
 
 
-
 def is_date(date):
     try:
         parse(date)
@@ -70,8 +69,8 @@ async def movietimes(ctx, *, arg):
             # sends a message containing all the times for that movie on that date
             date = convert_date(date)
             await ctx.channel.send(await get_movie_times(movie, date) +
-                                   "\nIf " + date + " was not the correct date you wanted, please enter the date in the "
-                                                  "mm/dd/yyyy format to ensure I get it right next time")
+                                   "\nIf " + str(date) + " was not the correct date you wanted, please enter the date in the "
+                                                    "mm/dd/yyyy format to ensure I get it right next time")
 
 
 @bot.command()
@@ -83,8 +82,8 @@ async def movies(ctx, movie_date):
     else:
         date = convert_date(date)
         await ctx.channel.send(await show_available_movies(date) +
-                               "\nIf " + date + " was not the correct date you wanted, please enter the date in the "
-                                              "mm/dd/yyyy format to ensure I get it right next time")
+                               "\nIf " + str(date) + " was not the correct date you wanted, please enter the date in the "
+                                                "mm/dd/yyyy format to ensure I get it right next time")
 
 
 async def get_movie_times(movie_name, movie_date):
@@ -169,4 +168,4 @@ async def show_available_movies(date_param):
     return available_movies
 
 
-bot.run("Njc4ODQxMTU5NDI2MTEzNTQz.XkoqGA.BAYRHGnbipP3YPiOb7yFztlZXGk")
+bot.run(os.environ['DISCORD_TOKEN'])
