@@ -9,10 +9,12 @@ from fuzzywuzzy import process
 bot = commands.Bot(command_prefix='++')
 bot.remove_command("help")
 
+
 def get_discord_token():
     DISCORD_TOKEN_FILE = open(r"DISCORD_TOKEN.txt", 'r')
     DISCORD_TOKEN = DISCORD_TOKEN_FILE.read()
     return DISCORD_TOKEN
+
 
 @bot.event
 async def on_ready():
@@ -107,7 +109,6 @@ async def get_movie_times(movie_name, movie_date):
     else:
         return 'There are no showings of ' + key_of_movie + ' on ' + date + ' at Blackstone 14 Cinema De Lux'
 
-
     if len(times) > 0:
         return 'The show times for \"' + key_of_movie + '\" on ' + movie_date + ' at Blackstone 14 Cinema De Lux are: ' + times
     else:
@@ -143,5 +144,5 @@ async def show_available_movies(date_param):
 
     return available_movies
 
-bot.run(get_discord_token())
 
+bot.run(get_discord_token())
